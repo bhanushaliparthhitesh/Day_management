@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Maximize, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLocalStorage } from "@/lib/useLocalStorage";
+import type { Task } from "./TodoList";
 
 export default function ClockMode() {
   const [isActive, setIsActive] = useState(false);
@@ -12,6 +13,7 @@ export default function ClockMode() {
   const [isDimmed, setIsDimmed] = useState(false);
   const [showControls, setShowControls] = useState(true);
   const [use12Hour] = useLocalStorage<boolean>("dayflow-12hr", false);
+  const [tasks] = useLocalStorage<Task[]>("dayflow-tasks", []);
   
   const wakeLockRef = useRef<WakeLockSentinel | null>(null);
   const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -109,7 +111,6 @@ export default function ClockMode() {
     };
     
     mql.addEventListener('change', handleOrientation);
-    // Initial check (optional, let's keep it just on change so it's not annoying)
     
     return () => mql.removeEventListener('change', handleOrientation);
   }, [isActive]);
@@ -149,7 +150,6 @@ export default function ClockMode() {
     hour12: use12Hour,
     hour: "2-digit",
     minute: "2-digit",
-    second: "2-digit",
   });
 
   const dateString = time.toLocaleDateString("en-US", {
@@ -164,7 +164,7 @@ export default function ClockMode() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className={cn(
-        "fixed inset-0 z-50 bg-background flex flex-col items-center justify-center transition-all duration-1000",
+        "fixed inset-0 z-50 bg-background flex items-center justify-center transition-all duration-1000",
         isDimmed ? "brightness-50" : "brightness-100"
       )}
       onClick={handleInteraction}
@@ -172,6 +172,32 @@ export default function ClockMode() {
       onTouchStart={handleInteraction}
     >
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-neon-blue/10 via-background to-background" />
+
+      {/* Sidebar with Tasks */}
+      <AnimatePresence>
+        {showControls && tasks.length > 0 && (
+          <motion.div 
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            className="absolute left-0 top-0 bottom-0 w-64 md:w-80 p-6 overflow-y-auto border-r border-white/5 bg-black/40 backdrop-blur-md z-40 shadow-xl"
+          >
+            <h3 className="text-neon-orange font-heading font-bold mb-6 tracking-widest uppercase text-sm">Today's Missions</h3>
+            <div className="space-y-4">
+              {tasks.filter(t => !t.completed).map(task => (
+                <div key={task.id} className="text-white/80 text-sm md:text-base truncate border-l-2 border-neon-blue pl-3 py-1">
+                  {task.text}
+                </div>
+              ))}
+              {tasks.filter(t => t.completed).map(task => (
+                <div key={task.id} className="text-white/30 text-sm md:text-base truncate line-through pl-3 py-1">
+                  {task.text}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {showControls && (
@@ -190,15 +216,15 @@ export default function ClockMode() {
         )}
       </AnimatePresence>
 
-      <div className="relative z-10 text-center landscape:scale-125 transition-transform duration-500">
+      <div className="relative z-10 text-center flex flex-col items-center landscape:scale-125 transition-transform duration-500">
         <motion.h1 
           layoutId="clock-time"
-          className="text-[15vw] md:text-[10rem] font-heading font-bold tabular-nums tracking-tighter text-white drop-shadow-[0_0_30px_rgba(0,217,255,0.4)] leading-none mb-4"
+          className="text-[12vw] md:text-[8rem] font-heading font-bold tabular-nums tracking-tighter text-white drop-shadow-[0_0_30px_rgba(0,217,255,0.4)] leading-none mb-4"
         >
           {timeString}
         </motion.h1>
         
-        <p className="text-2xl md:text-4xl text-neon-blue font-heading tracking-widest uppercase font-bold drop-shadow-md">
+        <p className="text-xl md:text-3xl text-neon-blue font-heading tracking-widest uppercase font-bold drop-shadow-md">
           {dateString}
         </p>
       </div>
