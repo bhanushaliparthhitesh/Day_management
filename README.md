@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DayFlow
+
+DayFlow is a mobile-first, anime protagonist HUD-styled daily productivity web app. It is designed to keep you motivated and energetic throughout the day, providing an immersive interface rather than a corporate look.
+
+![DayFlow Screenshot](./screenshot.png)
+
+## Features
+
+- **Hero Clock & Day Progress**: A bold, neon-glowing digital clock with a dynamic greeting based on the time of day, and a progress bar showing how much of the day has elapsed.
+- **Mission List (To-Dos)**: Add tasks with priority tags. Completing tasks gives you XP, levels you up, and triggers satisfying confetti bursts! Includes swipe-to-delete functionality and filter tabs.
+- **Mind Dump (Sticky Notes)**: A grid of neon-colored sticky notes with slight random rotations for a handwritten feel. Expand to edit, change colors, and manage your thoughts effortlessly.
+- **Desk Stand / Clock Mode**: A dedicated fullscreen clock mode with a screen wake lock (so your phone doesn't go to sleep) and auto-dimming features at night.
+- **Local Storage Persistence**: All your tasks, notes, and XP are saved in your browser's local storage and persist across refreshes. No backend required!
+
+## Tech Stack
+
+- **Next.js 14** (App Router)
+- **React 19**
+- **TypeScript**
+- **Tailwind CSS (v4)**
+- **Framer Motion** for spring animations and interactions
+- **Lucide React** for icons
+- **Canvas Confetti** for celebration effects
 
 ## Getting Started
 
-First, run the development server:
+First, install the dependencies if you haven't already:
+
+```bash
+npm install
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Notes on Clock Mode
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The fullscreen Clock Mode uses the `navigator.wakeLock` API to keep the screen awake. This API often requires HTTPS to function, so it will work perfectly when deployed (e.g., on Vercel), but might be restricted on some browsers when testing on HTTP `localhost`.
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new). Since there is no backend database, deploying the static frontend is all you need to get DayFlow running globally!
