@@ -2,7 +2,7 @@
 
 DayFlow is a mobile-first, anime protagonist HUD-styled daily productivity web app. It is designed to keep you motivated and energetic throughout the day, providing an immersive interface rather than a corporate look.
 
-![DayFlow Screenshot](./screenshot.png)
+![DayFlow Screenshot](./public/Screenshot%202026-07-06%20121607.png)
 
 ## Features
 
