@@ -4,12 +4,14 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Maximize, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLocalStorage } from "@/lib/useLocalStorage";
 
 export default function ClockMode() {
   const [isActive, setIsActive] = useState(false);
   const [time, setTime] = useState<Date | null>(null);
   const [isDimmed, setIsDimmed] = useState(false);
   const [showControls, setShowControls] = useState(true);
+  const [use12Hour] = useLocalStorage<boolean>("dayflow-12hr", false);
   
   const wakeLockRef = useRef<WakeLockSentinel | null>(null);
   const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -144,7 +146,7 @@ export default function ClockMode() {
   if (!time) return null;
 
   const timeString = time.toLocaleTimeString("en-US", {
-    hour12: false,
+    hour12: use12Hour,
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",

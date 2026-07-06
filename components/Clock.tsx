@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useLocalStorage } from "@/lib/useLocalStorage";
 
 export default function Clock() {
   const [time, setTime] = useState<Date | null>(null);
+  const [use12Hour, setUse12Hour] = useLocalStorage<boolean>("dayflow-12hr", false);
 
   useEffect(() => {
     setTime(new Date());
@@ -33,7 +35,7 @@ export default function Clock() {
   };
 
   const timeString = time.toLocaleTimeString("en-US", {
-    hour12: false,
+    hour12: use12Hour,
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
@@ -51,10 +53,16 @@ export default function Clock() {
       <div className="absolute -inset-4 bg-gradient-to-r from-neon-blue/20 via-neon-magenta/20 to-neon-orange/20 opacity-0 blur-xl transition-opacity duration-1000 group-hover:opacity-100" />
       
       <div className="relative z-10 flex flex-col items-center text-center space-y-4">
-        <div>
+        <div className="flex items-center justify-center space-x-3">
           <p className="text-neon-blue font-heading tracking-widest text-sm uppercase font-bold">
             {dateString}
           </p>
+          <button 
+            onClick={() => setUse12Hour(!use12Hour)}
+            className="text-[10px] font-bold tracking-widest uppercase border border-white/20 rounded px-1.5 py-0.5 text-white/50 hover:text-white hover:border-white/50 transition-colors"
+          >
+            {use12Hour ? "12H" : "24H"}
+          </button>
         </div>
 
         <div className="relative">
